@@ -41,8 +41,6 @@ function operate(first, op, second) {
     return result;
 }
 
-
-
 const display = document.querySelector('.display');
 const digitBtns = document.querySelectorAll('.digit');
 const operatorBtns = document.querySelectorAll('.operator');
@@ -51,45 +49,53 @@ const clearBtn = document.querySelector('.clear');
 let firstOperand = '';
 let secondOperand = '';
 let operator = '';
-let expression = '';
+let result = '';
 let opClickedOrNot = false;
 
 digitBtns.forEach(digitBtn => {
     digitBtn.addEventListener('click', (e) => {
-        if (opClickedOrNot == false) {
-            firstOperand += e.target.value;
+        if (firstOperand.length > 0 && operator.length > 0) {
+            secondOperand += e.target.value
+            display.innerHTML = '';
         }
         else {
-            secondOperand += e.target.value;
-        }   
-
-        const num = document.createElement('div');
-        num.textContent = e.target.value;
-        num.style.display = 'inline-block';
-        display.appendChild(num);
-
+            firstOperand += e.target.value;
+        }
+        const digit = document.createElement('div');
+        digit.textContent = e.target.value;
+        digit.style.display = 'inline-block';
+        display.appendChild(digit); 
+        console.log(`first: ${firstOperand}`);
+        console.log(`second: ${secondOperand}`);
     })
 });
 
 operatorBtns.forEach(operatorBtn => {
     operatorBtn.addEventListener('click', (e) => {
-        opClickedOrNot = true;
-        const op = document.createElement('div');
-        op.textContent = e.target.value;
-        op.style.display = 'inline-block';
-        display.appendChild(op);
+        if (secondOperand.length > 0) {
+            firstOperand = result;
+            result = '';
+            secondOperand = '';
+        }
 
         operator = e.target.value;
+        console.log(`op: ${operator}`);
     })
 });
 
 equalBtn.addEventListener('click', function() {
-    const result = document.createElement('div');
-    result.textContent = operate(firstOperand, operator, secondOperand);
     display.innerHTML = '';
-    display.appendChild(result);
+    const resultContainer = document.createElement('div');
+    result = operate(firstOperand, operator, secondOperand);
+    firstOperand = result;
+    secondOperand = '';
+    operator = '';
+    resultContainer.textContent = result;
+    display.appendChild(resultContainer);
+    console.log(`result: ${result}`);
 })
 
+// Works fine
 clearBtn.addEventListener('click', function() {
     display.innerHTML = '';
     firstOperand = '';
