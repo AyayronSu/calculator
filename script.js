@@ -11,34 +11,15 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
+    let quotient = 0;
     if (b == 0) {
         alert("Zero-Division Error");
+
     }
     else {
-        return a / b;
+        quotient = a / b;
+        return quotient.toFixed(3);
     }
-}
-
-function operate(first, op, second) {
-    let result = 0;
-
-    if (op == "+") {
-        result = add(first, second)
-    }
-    else if (op == "-") {
-        result = subtract(first, second);
-    }
-    else if (op == "*") {
-        result = multiply(first, second);
-    }
-    else if (op == "/") {
-        result = divide(first, second);
-    }
-    else {
-        return "Invalid operator";
-    }
-
-    return result;
 }
 
 const display = document.querySelector('.display');
@@ -73,7 +54,6 @@ digitBtns.forEach(digitBtn => {
 operatorBtns.forEach(operatorBtn => {
     operatorBtn.addEventListener('click', (e) => {
         if (secondOperand.length > 0) {
-            firstOperand = result;
             result = '';
             secondOperand = '';
         }
@@ -84,12 +64,11 @@ operatorBtns.forEach(operatorBtn => {
 });
 
 equalBtn.addEventListener('click', function() {
+
     display.innerHTML = '';
     const resultContainer = document.createElement('div');
     result = operate(firstOperand, operator, secondOperand);
-    firstOperand = result;
-    secondOperand = '';
-    operator = '';
+    firstOperand = result.toString();
     resultContainer.textContent = result;
     display.appendChild(resultContainer);
     console.log(`result: ${result}`);
@@ -103,3 +82,4 @@ clearBtn.addEventListener('click', function() {
     operator = '';
     opClickedOrNot = false;
 })
+
