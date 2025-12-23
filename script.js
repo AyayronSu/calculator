@@ -3,23 +3,46 @@ function add(a, b) {
 }
 
 function subtract(a, b) {
-    return a - b;
+    return Number(a) - Number(b);
 }
 
 function multiply(a, b) {
-    return a * b;
+    return Number(a) * Number(b);
 }
 
 function divide(a, b) {
-    let quotient = 0;
+    a = Number(a);
+    b = Number(b);
+
     if (b == 0) {
         alert("Zero-Division Error");
-
+        return null;
     }
     else {
-        quotient = a / b;
-        return quotient.toFixed(3);
+        return Math.round((a / b) * 1000) / 1000;
     }
+}
+
+function operate(first, op, second) {
+    let result = 0;
+
+    if (op == "+") {
+        result = add(first, second)
+    }
+    else if (op == "-") {
+        result = subtract(first, second);
+    }
+    else if (op == "*") {
+        result = multiply(first, second);
+    }
+    else if (op == "/") {
+        result = divide(first, second);
+    }
+    else {
+        return "Invalid operator";
+    }
+
+    return result;
 }
 
 const display = document.querySelector('.display');
@@ -27,11 +50,10 @@ const digitBtns = document.querySelectorAll('.digit');
 const operatorBtns = document.querySelectorAll('.operator');
 const equalBtn = document.querySelector('.equal');
 const clearBtn = document.querySelector('.clear');
-let firstOperand = '';
+let firstOperand = '';  
 let secondOperand = '';
 let operator = '';
 let result = '';
-let opClickedOrNot = false;
 
 digitBtns.forEach(digitBtn => {
     digitBtn.addEventListener('click', (e) => {
@@ -57,18 +79,21 @@ operatorBtns.forEach(operatorBtn => {
             result = '';
             secondOperand = '';
         }
-
+        if (firstOperand === '') return;
         operator = e.target.value;
         console.log(`op: ${operator}`);
     })
 });
 
 equalBtn.addEventListener('click', function() {
-
+    if (!firstOperand || !operator || !secondOperand) return;
     display.innerHTML = '';
     const resultContainer = document.createElement('div');
     result = operate(firstOperand, operator, secondOperand);
+    if (result === null) return;
     firstOperand = result.toString();
+    secondOperand = '';
+    operator = '';
     resultContainer.textContent = result;
     display.appendChild(resultContainer);
     console.log(`result: ${result}`);
